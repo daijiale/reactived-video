@@ -1,2 +1,3 @@
 # reactived-video
-a reactived-video framework
+
+一个互动电影平台的landing页尝试
