@@ -15,15 +15,15 @@ export const banner = [
     className: 'seeconf-wrap',
     children: [
       { children: 'Seeking Experience & Engineering Conference', className: 'seeconf-en-name' },
-      { children: '首届蚂蚁体验科技大会', className: 'seeconf-title', tag: 'h1' },
-      { children: '探索极致用户体验与最佳工程实践', className: 'seeconf-cn-name' },
+      { children: '', className: 'seeconf-title', tag: 'h1' },
+      { children: '', className: 'seeconf-cn-name' },
       {
         children: '了解详细',
         className: 'banner-button',
         tag: 'button',
-        link: 'https://seeconf.alipay.com/',
+        link: '',
       },
-      { children: '2018.01.06 / 中国·杭州', className: 'seeconf-time' },
+      { children: '', className: 'seeconf-time' },
     ],
   },
   {
@@ -32,19 +32,19 @@ export const banner = [
     className: 'seeconf-wrap',
     children: [
       { children: 'Seeking Experience & Engineering Conference', className: 'seeconf-en-name' },
-      { children: '首届蚂蚁体验科技大会', className: 'seeconf-title', tag: 'h1' },
-      { children: '探索极致用户体验与最佳工程实践', className: 'seeconf-cn-name' },
+      { children: '', className: 'seeconf-title', tag: 'h1' },
+      { children: '', className: 'seeconf-cn-name' },
       {
         children: '了解详细',
         className: 'banner-button',
         tag: 'button',
-        link: 'https://seeconf.alipay.com/',
+        link: '',
       },
-      { children: '2018.01.06 / 中国·杭州', className: 'seeconf-time' },
+      { children: '', className: 'seeconf-time' },
     ],
   },
   {
-    img: 'https://notecdn.yiban.io/cloud_res_dev/87312400/imgs/19-1-11_21:40:29.249_10887.jpeg',
+    img: 'https://notecdn.yiban.io/cloud_res_dev/87312400/imgs/19-1-11_21:40:14.565_2332.jpeg',
     imgMobile: 'https://placehold.it/200x300',
     className: 'seeconf-wrap',
     children: [
@@ -57,7 +57,7 @@ export const banner = [
         tag: 'button',
         link: 'https://seeconf.alipay.com/',
       },
-      { children: '2018.01.06 / 中国·杭州', className: 'seeconf-time' },
+      { children: '', className: 'seeconf-time' },
     ],
   },
 ];
@@ -96,26 +96,13 @@ export const page3 = {
       img: 'https://gw.alipayobjects.com/zos/rmsportal/iVOzVyhyQkQDhRsuyBXC.svg',
       imgMobile: 'https://gw.alipayobjects.com/zos/rmsportal/HxEfljPlykWElfhidpxR.svg',
       src: 'https://gw.alipayobjects.com/os/rmsportal/gCFHQneMNZMMYEdlHxqK.mp4',
-    }
-    // {
-    //   img: 'https://gw.alipayobjects.com/zos/rmsportal/iVOzVyhyQkQDhRsuyBXC.svg',
-    //   imgMobile: 'https://gw.alipayobjects.com/zos/rmsportal/HxEfljPlykWElfhidpxR.svg',
-    //   src: 'https://gw.alipayobjects.com/os/rmsportal/gCFHQneMNZMMYEdlHxqK.mp4',
-    // },
+    },
   ],
 };
 
 export const page4 = {
-  title: '众多企业正在使用',
+  title: '',
   children: [
-    'https://gw.alipayobjects.com/zos/rmsportal/qImQXNUdQgqAKpPgzxyK.svg', // 阿里巴巴
-    'https://gw.alipayobjects.com/zos/rmsportal/LqRoouplkwgeOVjFBIRp.svg', // 蚂蚁金服
-    'https://gw.alipayobjects.com/zos/rmsportal/TLCyoAagnCGXUlbsMTWq.svg', // 人民网
-    'https://gw.alipayobjects.com/zos/rmsportal/HmCGMKcJQMwfPLNCIhOH.svg', // cisco
-    'https://gw.alipayobjects.com/zos/rmsportal/aqldfFDDqRVFRxqLUZOk.svg', // GrowingIO
-    'https://gw.alipayobjects.com/zos/rmsportal/rqNeEFCGFuwiDKHaVaPp.svg', // 饿了么
-    'https://gw.alipayobjects.com/zos/rmsportal/FdborlfwBxkWIqKbgRtq.svg', // 滴滴出行
-    'https://gw.alipayobjects.com/zos/rmsportal/coPmiBkAGVTuTNFVRUcg.png', // 飞凡网
   ],
 };
 

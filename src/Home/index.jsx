@@ -11,7 +11,6 @@ enquireScreen((b) => {
   isMobile = b;
 });
 
-
 class Home extends React.PureComponent {
   state = {
     isMobile,
@@ -28,21 +27,20 @@ class Home extends React.PureComponent {
 
   navToShadow = (e) => {
     this.setState({ showShadow: e.mode === 'leave' });
-  }
+  };
 
   render() {
-    return (
-      [
-        // <Header key="header" className={this.state.showShadow ? 'show-shadow' : ''} />,
-        <Banner key="banner" isMobile={this.state.isMobile} navToShadow={this.navToShadow} />,  
-        <Page1 key="page1" isMobile={this.state.isMobile} />,  
-        <Page3 key="page3" isMobile={this.state.isMobile} />,
-        // <Page2 key="page2" isMobile={this.state.isMobile} />,
-        // <Page4 key="page4" />,
-        <Footer key="footer" />,
-        <DocumentTitle title="互动电影" key="title" />,
-      ]
-    );
+    return [
+      <Banner
+        key="banner"
+        isMobile={this.state.isMobile}
+        navToShadow={this.navToShadow}
+      />,
+      <Page1 key="page1" isMobile={this.state.isMobile} />,
+      <Page3 key="page3" isMobile={this.state.isMobile} />,
+      <Footer key="footer" />,
+      <DocumentTitle title="互动电影" key="title" />,
+    ];
   }
 }
 export default Home;
