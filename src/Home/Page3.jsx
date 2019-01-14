@@ -7,6 +7,7 @@ import TweenOne from 'rc-tween-one';
 import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import BannerAnim from 'rc-banner-anim';
 import { DefaultPlayer as Video } from 'react-html5video';
+import Hls from 'hls.js';
 import axios from '../axios';
 import { page3 } from './data';
 
@@ -17,17 +18,48 @@ const alertM = Modal.alert;
 
 export default class Page3 extends React.PureComponent {
   state = {
+    videoInfo: [
+      {
+        img: page3.children[0].img,
+        imgMobile: page3.children[0].imgMobile,
+        src: page3.children[0].src,
+      },
+    ],
+    // nextFirVideoInfo: {
 
+    // },
+    // nextSecVideoInfo: {
+
+    // },
   };
 
   async componentDidMount() {
     // 加载首页数据
-    const baseInfoRes = await axios.get('/v1/base_info');
-    console.log(baseInfoRes);
+    await this.initVideoInfoFromServer();
+    // 实例化hls，支持m3u8播放
+    this.addHlsToPlayer();
+  }
 
-    if (baseInfoRes.FirstURL != null) {
-      const videoRes = await axios.get('/v1/video_info/1');
-      console.log(videoRes);
+  async initVideoInfoFromServer() {
+    const baseInfoRes = await axios.get('/v1/base_info');
+    if (baseInfoRes.data.Result.FirstURI == null) {
+      return;
+    }
+    const videoRes = await axios.get(baseInfoRes.data.Result.FirstURI);
+    this.setState({
+      videoInfo: [{ img: page3.children[0].img, imgMobile: page3.children[0].imgMobile, src: videoRes.data.Result.VideoPlayURI }],
+    });
+  }
+
+  addHlsToPlayer() {
+    if (Hls.isSupported()) {
+      const video = document.getElementById('video-player');
+      const hls = new Hls();
+      hls.loadSource(this.state.videoInfo[0].src);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+      });
     }
   }
 
@@ -39,33 +71,33 @@ export default class Page3 extends React.PureComponent {
       document.exitFullscreen();
     }
     alertM('选择', '选择题介绍', [
-      { text: '取消', onPress: () => this.handleCancel() },
-      { text: '确定', onPress: () => this.handleConfirm() },
+      { text: '取消', onPress: () => this.handleFirPress() },
+      { text: '确定', onPress: () => this.handleSecPress() },
     ]);
   }
 
-  handleCancel() {
+  handleFirPress() {
     console.log('cancel');
   }
 
-  handleConfirm() {
+  handleSecPress() {
     console.log('ok');
   }
 
   render() {
     const { isMobile } = this.props;
-
-    const children = page3.children.map((item, i) => (
+    const children = this.state.videoInfo.map((item, i) => (
       <Element key={i.toString()}>
         <BgElement className="banner" key="bg">
           <Video
-            id="test"
+            id="video-player"
             muted
             controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
             poster={isMobile ? item.imgMobile : item.img}
             key="video"
             // eslint-disable-next-line react/jsx-no-bind
             onEnded={this.handleVideoEnded.bind(this)}
+
           >
             <source src={item.src} />
           </Video>

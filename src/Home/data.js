@@ -81,7 +81,7 @@ export const page1 = {
     },
     {
       title: '价格实惠',
-      content: '每段只要￥9.9，支持支付宝',
+      content: '全集只要￥9.9，支持支付宝',
       src: 'https://gw.alipayobjects.com/zos/rmsportal/eLtHtrKjXfabZfRchvVT.svg',
       color: '#AB33F7',
       shadowColor: 'rgba(112, 73, 166, 0.08)',
@@ -93,9 +93,9 @@ export const page3 = {
   title: '电影正片',
   children: [
     {
-      img: 'https://gw.alipayobjects.com/zos/rmsportal/iVOzVyhyQkQDhRsuyBXC.svg',
-      imgMobile: 'https://gw.alipayobjects.com/zos/rmsportal/HxEfljPlykWElfhidpxR.svg',
-      src: 'https://gw.alipayobjects.com/os/rmsportal/gCFHQneMNZMMYEdlHxqK.mp4',
+      img: 'http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/pc-poster.svg',
+      imgMobile: 'http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/mobile-poster.svg',
+      src: 'https://vd3.bdstatic.com/mda-imtnknyata0e9713/mda-imtnknyata0e9713.mp4',
     },
   ],
 };
