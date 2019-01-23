@@ -95,7 +95,7 @@ export const page3 = {
     {
       img: 'http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/pc-poster.svg',
       imgMobile: 'http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/mobile-poster.svg',
-      src: 'https://vd3.bdstatic.com/mda-imtnknyata0e9713/mda-imtnknyata0e9713.mp4',
+      src: 'http://192.168.5.141:8080/play_video/1/main.m3u8',
     },
   ],
 };

@@ -36,8 +36,8 @@ class Home extends React.PureComponent {
         isMobile={this.state.isMobile}
         navToShadow={this.navToShadow}
       />,
-      <Page1 key="page1" isMobile={this.state.isMobile} />,
       <Page3 key="page3" isMobile={this.state.isMobile} />,
+      <Page1 key="page1" isMobile={this.state.isMobile} />,
       <Footer key="footer" />,
       <DocumentTitle title="互动电影" key="title" />,
     ];
