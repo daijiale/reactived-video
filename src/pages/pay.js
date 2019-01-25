@@ -1,0 +1,110 @@
+import React from 'react';
+import { Result, Flex, Button, Icon, WhiteSpace } from 'antd-mobile';
+import router from 'umi/router';
+import Footer from '../Home/Footer';
+import axios from '../axios';
+
+class Pay extends React.PureComponent {
+    state = {
+      payChoiseIsShow: true,
+      payByWechatURI: '/v1/pay/wechat',
+      payByAlipayURI: '/v1/pay/alipay',
+      checkPaidURI: '/v1/check_paid',
+      payChannel: '', // wechat/alipay
+      payQrImg: '',
+      qrExpiresTime: '',
+    }
+
+    componentDidMount() {
+
+    }
+
+    async payByWechat() {
+      const payRes = await axios.get(this.state.payByWechatURI);
+      if (payRes.data.ErrMsg === '') {
+        this.setState({
+          payQrImg: payRes.data.Result.qr_img,
+          qrExpiresTime: payRes.data.Result.expires_in,
+          payChoiseIsShow: false,
+          payQRIsShow: true,
+          payChannel: '微信(Wechat)',
+        });
+      } else {
+        alert('您已支付，请尽情观看，将跳转至正片页');
+        router.push('/');
+      }
+    }
+
+    async payByAlipay() {
+      const payRes = await axios.get(this.state.payByAlipayURI);
+      if (payRes.data.ErrMsg === '') {
+        this.setState({
+          payQrImg: payRes.data.Result.qr_img,
+          qrExpiresTime: payRes.data.Result.expires_in,
+          payChoiseIsShow: false,
+          payQRIsShow: true,
+          payChannel: '支付宝(Alipay)',
+        });
+      } else {
+        alert('您已支付，请尽情观看，将跳转至正片页');
+        router.push('/');
+      }
+    }
+
+    async paidConfirm() {
+      const checkPaidRes = await axios.get(this.state.checkPaidURI);
+      console.log(checkPaidRes);
+      if (checkPaidRes.data.ErrMsg === '') {
+        // 支付成功
+        router.push('/');
+      } else {
+        alert('尚未查询到该订单，请确认是否扣款成功或稍后重试');
+      }
+    }
+
+
+    render() {
+      const PayChoise = () => (
+        <div>
+          <h1 className="text-center">请选择支付渠道</h1>
+          <Flex>
+            <Flex.Item>
+              <Button icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/pdFARIqkrKEGVVEwotFe.svg" alt="" />} onClick={() => { this.payByAlipay(); }}>支付宝</Button>
+            </Flex.Item>
+            <Flex.Item>
+              <Button icon={<img src="http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/wechat.svg" alt="" />} onClick={() => { this.payByWechat(); }}>微信支付</Button>
+            </Flex.Item>
+          </Flex>
+          <WhiteSpace />
+        </div>
+      );
+
+      const PayQR = () => (
+        <div>
+          <div className="text-center">
+            <h1>{`${this.state.payChannel} | 收银台 `}</h1>
+          </div>
+          <Result
+            imgUrl={this.state.payQrImg}
+            message={(
+              <div>
+                <p>支付宝渠道：请使用手机支付宝App扫码进行支付</p>
+                <p>微信支付渠道：请使用手机微信App扫码进行支付</p>
+                <p>移动用户：请全屏截图本页，再在本机对应支付渠道中进行二维码识别支付</p>
+                <Button icon={<Icon type="check-circle" className="spe" style={{ fill: '#0cd4ec' }} />} onClick={() => { this.paidConfirm(); }}>确认支付完成</Button>
+              </div>
+            )}
+          />
+        </div>
+      );
+
+      return (
+        <div>
+          {this.state.payChoiseIsShow && <PayChoise />}
+          {this.state.payQRIsShow && <PayQR />}
+          <Footer key="footer" />
+        </div>
+      );
+    }
+}
+export default Pay;

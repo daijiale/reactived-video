@@ -8,6 +8,7 @@ import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import BannerAnim from 'rc-banner-anim';
 import { DefaultPlayer as Video } from 'react-html5video';
 import Hls from 'hls.js';
+import router from 'umi/router';
 import axios from '../axios';
 import { page3 } from './data';
 
@@ -64,12 +65,12 @@ export default class Page3 extends React.PureComponent {
     const videoRes = await axios.get(videoInfoUri);
     if (!videoRes.data.ErrMsg === '') {
       return;
+      // TODO:设置统一的异常处理页面
+    }
+    if ((videoRes.data.ErrMsg === 'no paid')) {
+      router.push('/pay');
     }
     const videoInfoRes = videoRes.data.Result;
-    // if (!videoInfoRes.NoNeedPaid) {
-    //   alertM('未购买电影，请先支付');
-    //   // TODO:弹出支付页选项
-    // }
     const videoInfoCache = {};
     videoInfoCache.VideoPlayURI = videoInfoRes.VideoPlayURI;
     videoInfoCache.choiceMethod = videoInfoRes.ChoiceMethod;
@@ -127,13 +128,24 @@ export default class Page3 extends React.PureComponent {
     }
   }
 
-  handleVideoEndedTest() {
-    alertM('hehe');
+  exitFullscreen() {
+    // 浏览器全屏、元素全屏、
+    // const fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+    // if (document.exitFullscreen) {
+    //   document.exitFullscreen();
+    // } else if (document.msExitFullscreen) {
+    //   document.msExitFullscreen();
+    // } else if (document.mozCancelFullScreen) {
+    //   document.mozCancelFullScreen();
+    // } else if (document.webkitExitFullscreen) {
+    //   document.webkitExitFullscreen();
+    // }
   }
+
 
   handleVideoEnded() {
     // TODO:适配各个浏览器
-    document.exitFullscreen();
+    this.exitFullscreen();
 
     if (this.state.choiceMethod === 'Single') {
       // 单个文字选项
@@ -200,7 +212,7 @@ export default class Page3 extends React.PureComponent {
 
     return (
       <div className="page-wrapper page3">
-        <div className="page">
+        <div id="video-dom" className="page">
           <h1>{page3.title}</h1>
           <i />
           <WhiteSpace size="lg" />

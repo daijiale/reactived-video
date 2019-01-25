@@ -13,6 +13,11 @@ let routes = [
     "component": require('../index.js').default
   },
   {
+    "path": "/pay",
+    "exact": true,
+    "component": require('../pay.js').default
+  },
+  {
     "component": () => React.createElement(require('/usr/local/lib/node_modules/umi/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: false })
   }
 ];
