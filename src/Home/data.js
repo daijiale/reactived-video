@@ -81,7 +81,7 @@ export const page1 = {
     },
     {
       title: '价格实惠',
-      content: '全集只要￥9.9，支持支付宝',
+      content: '全集只要￥9.9，支持支付宝/微信支付',
       src: 'https://gw.alipayobjects.com/zos/rmsportal/eLtHtrKjXfabZfRchvVT.svg',
       color: '#AB33F7',
       shadowColor: 'rgba(112, 73, 166, 0.08)',

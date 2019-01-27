@@ -4,6 +4,12 @@ import router from 'umi/router';
 import Footer from '../Home/Footer';
 import axios from '../axios';
 
+const qrImg = {
+  width: '200px',
+  height: '200px',
+  marginBottom: '20px',
+};
+
 class Pay extends React.PureComponent {
     state = {
       payChoiseIsShow: true,
@@ -13,6 +19,7 @@ class Pay extends React.PureComponent {
       payChannel: '', // wechat/alipay
       payQrImg: '',
       qrExpiresTime: '',
+      qrExpiresDate: '',
     }
 
     componentDidMount() {
@@ -29,6 +36,7 @@ class Pay extends React.PureComponent {
           payQRIsShow: true,
           payChannel: '微信(Wechat)',
         });
+        this.setPayExipreTime();
       } else {
         alert('您已支付，请尽情观看，将跳转至正片页');
         router.push('/');
@@ -45,6 +53,7 @@ class Pay extends React.PureComponent {
           payQRIsShow: true,
           payChannel: '支付宝(Alipay)',
         });
+        this.setPayExipreTime();
       } else {
         alert('您已支付，请尽情观看，将跳转至正片页');
         router.push('/');
@@ -62,6 +71,15 @@ class Pay extends React.PureComponent {
       }
     }
 
+    setPayExipreTime() {
+      const newDate = new Date();
+      const currentTs = newDate.getTime() + this.state.qrExpiresTime * 1000;
+      newDate.setTime(currentTs);
+      const currentDate = newDate.toLocaleString();
+      this.setState({
+        qrExpiresDate: currentDate,
+      });
+    }
 
     render() {
       const PayChoise = () => (
@@ -69,7 +87,7 @@ class Pay extends React.PureComponent {
           <h1 className="text-center">请选择支付渠道</h1>
           <Flex>
             <Flex.Item>
-              <Button icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/pdFARIqkrKEGVVEwotFe.svg" alt="" />} onClick={() => { this.payByAlipay(); }}>支付宝</Button>
+              <Button icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/pdFARIqkrKEGVVEwotFe.svg" alt="" />} onClick={() => { this.getPayExipreTime(); }}>支付宝</Button>
             </Flex.Item>
             <Flex.Item>
               <Button icon={<img src="http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/wechat.svg" alt="" />} onClick={() => { this.payByWechat(); }}>微信支付</Button>
@@ -85,13 +103,19 @@ class Pay extends React.PureComponent {
             <h1>{`${this.state.payChannel} | 收银台 `}</h1>
           </div>
           <Result
-            imgUrl={this.state.payQrImg}
+            id="qrcodeImg"
             message={(
               <div>
-                <p>支付宝渠道：请使用手机支付宝App扫码进行支付</p>
-                <p>微信支付渠道：请使用手机微信App扫码进行支付</p>
-                <p>移动用户：请全屏截图本页，再在本机对应支付渠道中进行二维码识别支付</p>
+                <img style={qrImg} src={this.state.payQrImg} />
+                <p>支付宝渠道：请使用支付宝App扫码进行支付</p>
+                <p>微信支付渠道：请使用微信App扫码进行支付</p>
+                <p>移动用户：请全屏截图本页，再在本机对应支付渠道App中进行二维码识别支付</p>
                 <Button icon={<Icon type="check-circle" className="spe" style={{ fill: '#0cd4ec' }} />} onClick={() => { this.paidConfirm(); }}>确认支付完成</Button>
+                <p>
+                  {' 请于'}
+                  {this.state.qrExpiresDate}
+                  {' 时间点前支付，否则此次订单将失效 '}
+                </p>
               </div>
             )}
           />
