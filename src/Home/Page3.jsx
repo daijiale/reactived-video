@@ -44,6 +44,7 @@ export default class Page3 extends React.PureComponent {
     choiceQuestion: '',
     lastURI: '',
     firstURI: '',
+    isShowVideoSource: false,
   };
 
   async componentDidMount() {
@@ -68,7 +69,7 @@ export default class Page3 extends React.PureComponent {
       // TODO:设置统一的异常处理页面
     }
     if ((videoRes.data.ErrMsg === 'no paid')) {
-      router.push('/pay');
+      return router.push('/pay');
     }
     const videoInfoRes = videoRes.data.Result;
     const videoInfoCache = {};
@@ -121,32 +122,37 @@ export default class Page3 extends React.PureComponent {
         video.play();
       });
     } else {
-      alertM('开始播放？', '', [
-        { text: '确定', onPress: () => { video.play(); } },
-        { text: '取消', onPress: () => { video.load(); } },
+      alertM('移动端仅支持横屏观影，全屏播放建议使用电脑端观影', '', [
+        { text: '已牢记', onPress: () => { video.play(); } },
       ]);
     }
   }
 
   exitFullscreen() {
-    // 浏览器全屏、元素全屏、
-    // const fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
-    // if (document.exitFullscreen) {
-    //   document.exitFullscreen();
-    // } else if (document.msExitFullscreen) {
-    //   document.msExitFullscreen();
-    // } else if (document.mozCancelFullScreen) {
-    //   document.mozCancelFullScreen();
-    // } else if (document.webkitExitFullscreen) {
-    //   document.webkitExitFullscreen();
-    // }
+    const exitMethod = document.exitFullscreen // W3C
+            || document.mozCancelFullScreen // FireFox
+            || document.webkitExitFullscreen // Chrome等
+            || document.webkitExitFullscreen; // IE11
+    if (exitMethod) {
+      exitMethod.call(document);
+    } else if (typeof window.ActiveXObject !== 'undefined') { // for Internet Explorer
+      // eslint-disable-next-line no-undef
+      const wscript = new ActiveXObject('WScript.Shell');
+      if (wscript !== null) {
+        wscript.SendKeys('{F11}');
+      }
+    }
   }
 
 
   handleVideoEnded() {
-    // TODO:适配各个浏览器
-    this.exitFullscreen();
-
+    // 如果是全屏状态，则退出全屏
+    if (document.isFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen) {
+      this.exitFullscreen();
+      const video = document.getElementById('video-player');
+      video.load();
+      video.pause();
+    }
     if (this.state.choiceMethod === 'Single') {
       // 单个文字选项
       alertM(this.state.choiceQuestion, '', [
@@ -168,9 +174,11 @@ export default class Page3 extends React.PureComponent {
   }
 
   async getVideoFromURI(videoURI) {
+    this.setState({
+      isShowVideoSource: true,
+    });
     await this.resolveVideoInfo(videoURI);
   }
-
 
   render() {
     const { isMobile } = this.props;
@@ -185,10 +193,13 @@ export default class Page3 extends React.PureComponent {
             controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
             poster={isMobile ? item.imgMobile : item.img}
             key="video"
+            preload="none"
             // eslint-disable-next-line react/jsx-no-bind
             onEnded={this.handleVideoEnded.bind(this)}
+            webkit-playsinline="true"
+            playsInline="true"
           >
-            <source src={item.src} />
+            {this.state.isShowVideoSource && <source src={item.src} />}
           </Video>
         </BgElement>
       </Element>
@@ -217,8 +228,8 @@ export default class Page3 extends React.PureComponent {
           <i />
           <WhiteSpace size="lg" />
           <div style={{ textAlign: 'center' }}>
-            <Button icon="right" inline size="small" style={{ marginRight: '4px' }} onClick={() => { this.getVideoFromURI(firstURI); }}>从头观看</Button>
-            <Button inline size="small" icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/jBfVSpDwPbitsABtDDlB.svg" alt="" />} onClick={() => { this.getVideoFromURI(lastURI); }}>继续上次观看</Button>
+            <Button icon="right" inline size="small" style={{ marginRight: '4px' }} onClick={() => { this.getVideoFromURI(firstURI); }}>点击 | 从头播放</Button>
+            <Button inline size="small" icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/jBfVSpDwPbitsABtDDlB.svg" alt="" />} onClick={() => { this.getVideoFromURI(lastURI); }}>点击 | 继续上次播放</Button>
           </div>
           {React.createElement(
             isMobile ? 'div' : OverPack,

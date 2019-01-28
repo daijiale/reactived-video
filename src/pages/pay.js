@@ -62,9 +62,9 @@ class Pay extends React.PureComponent {
 
     async paidConfirm() {
       const checkPaidRes = await axios.get(this.state.checkPaidURI);
-      console.log(checkPaidRes);
       if (checkPaidRes.data.ErrMsg === '') {
         // 支付成功
+        alert('支付成功，开启48小时全集观影');
         router.push('/');
       } else {
         alert('尚未查询到该订单，请确认是否扣款成功或稍后重试');
@@ -87,7 +87,7 @@ class Pay extends React.PureComponent {
           <h1 className="text-center">请选择支付渠道</h1>
           <Flex>
             <Flex.Item>
-              <Button icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/pdFARIqkrKEGVVEwotFe.svg" alt="" />} onClick={() => { this.getPayExipreTime(); }}>支付宝</Button>
+              <Button icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/pdFARIqkrKEGVVEwotFe.svg" alt="" />} onClick={() => { this.payByAlipay(); }}>支付宝</Button>
             </Flex.Item>
             <Flex.Item>
               <Button icon={<img src="http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/wechat.svg" alt="" />} onClick={() => { this.payByWechat(); }}>微信支付</Button>
@@ -112,7 +112,7 @@ class Pay extends React.PureComponent {
                 <p>移动用户：请全屏截图本页，再在本机对应支付渠道App中进行二维码识别支付</p>
                 <Button icon={<Icon type="check-circle" className="spe" style={{ fill: '#0cd4ec' }} />} onClick={() => { this.paidConfirm(); }}>确认支付完成</Button>
                 <p>
-                  {' 请于'}
+                  {'请于'}
                   {this.state.qrExpiresDate}
                   {' 时间点前支付，否则此次订单将失效 '}
                 </p>
