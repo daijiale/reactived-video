@@ -75,7 +75,7 @@ class Pay extends React.PureComponent {
       const newDate = new Date();
       const currentTs = newDate.getTime() + this.state.qrExpiresTime * 1000;
       newDate.setTime(currentTs);
-      const currentDate = newDate.toLocaleString();
+      const currentDate = newDate.toLocaleTimeString();
       this.setState({
         qrExpiresDate: currentDate,
       });
@@ -111,10 +111,10 @@ class Pay extends React.PureComponent {
                 <p>微信支付渠道：请使用微信App扫码进行支付</p>
                 <p>移动用户：请全屏截图本页，再在本机对应支付渠道App中进行二维码识别支付</p>
                 <Button icon={<Icon type="check-circle" className="spe" style={{ fill: '#0cd4ec' }} />} onClick={() => { this.paidConfirm(); }}>确认支付完成</Button>
-                <p>
+                <p style={{ color: 'red' }}>
                   {'请于'}
                   {this.state.qrExpiresDate}
-                  {' 时间点前支付，否则此次订单将失效 '}
+                  {' 点前支付，否则此次订单将失效 '}
                 </p>
               </div>
             )}

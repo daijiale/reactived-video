@@ -67,14 +67,14 @@ export const page1 = {
   children: [
     {
       title: '交互式体验',
-      content: '比肩原版电影的互动体验',
+      content: '超过30+分支选择，400+分支剧情，10余+经典结局，比肩原版电影的互动体验',
       src: 'https://gw.alipayobjects.com/zos/rmsportal/KtRzkMmxBuWCVjPbBgRY.svg',
       color: '#EB2F96',
       shadowColor: 'rgba(166, 55, 112, 0.08)',
     },
     {
       title: '一键观看',
-      content: '无需梯子、无需注册会员，在天朝即可观看',
+      content: '无需科学上网、无需注册会员，在世界各处即可观看',
       src: 'https://gw.alipayobjects.com/zos/rmsportal/qIcZMXoztWjrnxzCNTHv.svg',
       color: '#1890FF',
       shadowColor: 'rgba(15, 93, 166, 0.08)',
@@ -93,9 +93,9 @@ export const page3 = {
   title: '电影正片',
   children: [
     {
-      img: 'http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/pc-poster.svg',
-      imgMobile: 'http://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/mobile-poster.svg',
-      src: 'http://192.168.5.141:8080/play_video/1/main.m3u8',
+      img: 'https://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/pc-poster.svg',
+      imgMobile: 'https://career-pic.oss-cn-beijing.aliyuncs.com/blackmirror/mobile-poster.svg',
+      src: 'https://192.168.5.141:8080/play_video/1/main.m3u8',
     },
   ],
 };

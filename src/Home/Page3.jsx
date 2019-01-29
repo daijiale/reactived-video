@@ -86,6 +86,7 @@ export default class Page3 extends React.PureComponent {
       videoInfoCache.nextSecVideoInfoText = videoInfoRes.ChoiceItems[1].Text ? videoInfoRes.ChoiceItems[1].Text : '';
     }
     this.setState({
+      // TODO:替换poster链接，svg，区分mobile
       videoInfo: [{ img: page3.children[0].img, imgMobile: page3.children[0].imgMobile, src: videoInfoRes.VideoPlayURI }],
       nextFirVideoInfo: { uri: videoInfoCache.nextFirVideoInfoUri, text: videoInfoCache.nextFirVideoInfoText },
       nextSecVideoInfo: { uri: videoInfoCache.nextSecVideoInfoUri, text: videoInfoCache.nextSecVideoInfoText },
