@@ -1,5 +1,6 @@
 import React from 'react';
 import { Result, Flex, Button, Icon, WhiteSpace } from 'antd-mobile';
+import { Spin } from 'antd';
 import router from 'umi/router';
 import Footer from '../Home/Footer';
 import axios from '../axios';
@@ -13,6 +14,7 @@ const qrImg = {
 class Pay extends React.PureComponent {
     state = {
       payChoiseIsShow: true,
+      payQRIsShow: false,
       payByWechatURI: '/v1/pay/wechat',
       payByAlipayURI: '/v1/pay/alipay',
       checkPaidURI: '/v1/check_paid',
@@ -20,6 +22,7 @@ class Pay extends React.PureComponent {
       payQrImg: '',
       qrExpiresTime: '',
       qrExpiresDate: '',
+      isLoading: false,
     }
 
     componentDidMount() {
@@ -27,6 +30,10 @@ class Pay extends React.PureComponent {
     }
 
     async payByWechat() {
+      this.setState({
+        isLoading: true,
+        payChoiseIsShow: false,
+      });
       const payRes = await axios.get(this.state.payByWechatURI);
       if (payRes.data.ErrMsg === '') {
         this.setState({
@@ -34,9 +41,9 @@ class Pay extends React.PureComponent {
           qrExpiresTime: payRes.data.Result.expires_in,
           payChoiseIsShow: false,
           payQRIsShow: true,
+          isLoading: false,
           payChannel: '微信(Wechat)',
         });
-        this.setPayExipreTime();
       } else {
         alert('您已支付，请尽情观看，将跳转至正片页');
         router.push('/');
@@ -44,6 +51,10 @@ class Pay extends React.PureComponent {
     }
 
     async payByAlipay() {
+      this.setState({
+        isLoading: true,
+        payChoiseIsShow: false,
+      });
       const payRes = await axios.get(this.state.payByAlipayURI);
       if (payRes.data.ErrMsg === '') {
         this.setState({
@@ -51,6 +62,7 @@ class Pay extends React.PureComponent {
           qrExpiresTime: payRes.data.Result.expires_in,
           payChoiseIsShow: false,
           payQRIsShow: true,
+          isLoading: false,
           payChannel: '支付宝(Alipay)',
         });
         this.setPayExipreTime();
@@ -82,6 +94,15 @@ class Pay extends React.PureComponent {
     }
 
     render() {
+      const Loading = () => (
+        <div>
+          <h1 className="text-center">正在请求支付中心</h1>
+          <Flex>
+            <Flex.Item className="text-center"><Spin tip="请耐心等待..." /></Flex.Item>
+          </Flex>
+          <WhiteSpace />
+        </div>
+      );
       const PayChoise = () => (
         <div>
           <h1 className="text-center">请选择支付渠道</h1>
@@ -125,6 +146,7 @@ class Pay extends React.PureComponent {
       return (
         <div>
           {this.state.payChoiseIsShow && <PayChoise />}
+          {this.state.isLoading && <Loading />}
           {this.state.payQRIsShow && <PayQR />}
           <Footer key="footer" />
         </div>

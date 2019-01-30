@@ -61,7 +61,6 @@ export default class Page3 extends React.PureComponent {
     this.setState({ lastURI: baseInfoRes.data.Result.LastURI, firstURI: baseInfoRes.data.Result.FirstURI });
   }
 
-
   async resolveVideoInfo(videoInfoUri) {
     const videoRes = await axios.get(videoInfoUri);
     if (!videoRes.data.ErrMsg === '') {
@@ -76,6 +75,10 @@ export default class Page3 extends React.PureComponent {
     videoInfoCache.VideoPlayURI = videoInfoRes.VideoPlayURI;
     videoInfoCache.choiceMethod = videoInfoRes.ChoiceMethod;
     videoInfoCache.choiceQuestion = videoInfoRes.ChoiceQuestion;
+
+    // TODO:设置Poster，区分mobile
+    videoInfoCache.PosterURI = videoInfoRes.VideoPosterURI ? videoInfoRes.VideoPosterURI : '';
+    videoInfoCache.MobilePosterURI = videoInfoRes.VideoPosterURIPhone ? videoInfoRes.VideoPosterURIPhone : '';
     if (videoInfoRes.ChoiceMethod === 'Single') {
       videoInfoCache.nextFirVideoInfoUri = videoInfoRes.ChoiceItems[0].NextURI ? videoInfoRes.ChoiceItems[0].NextURI : '';
       videoInfoCache.nextFirVideoInfoText = videoInfoRes.ChoiceItems[0].Text ? videoInfoRes.ChoiceItems[0].Text : '';
@@ -86,14 +89,12 @@ export default class Page3 extends React.PureComponent {
       videoInfoCache.nextSecVideoInfoText = videoInfoRes.ChoiceItems[1].Text ? videoInfoRes.ChoiceItems[1].Text : '';
     }
     this.setState({
-      // TODO:替换poster链接，svg，区分mobile
-      videoInfo: [{ img: page3.children[0].img, imgMobile: page3.children[0].imgMobile, src: videoInfoRes.VideoPlayURI }],
+      videoInfo: [{ img: videoInfoCache.PosterURI, imgMobile: videoInfoCache.MobilePosterURI, src: videoInfoRes.VideoPlayURI }],
       nextFirVideoInfo: { uri: videoInfoCache.nextFirVideoInfoUri, text: videoInfoCache.nextFirVideoInfoText },
       nextSecVideoInfo: { uri: videoInfoCache.nextSecVideoInfoUri, text: videoInfoCache.nextSecVideoInfoText },
       choiceMethod: videoInfoCache.choiceMethod,
       choiceQuestion: videoInfoCache.choiceQuestion,
     });
-    console.log(this.state);
     this.addHlsToPlayer();
   }
 
@@ -105,8 +106,22 @@ export default class Page3 extends React.PureComponent {
     await this.loadNextVideo(this.state.nextSecVideoInfo.uri);
   }
 
-  async handleInbox() {
-    alert('todo:handle inbox , check num');
+  async handleInbox(inputMessage) {
+    if (this.state.nextFirVideoInfo.text === '*') {
+      if (this.state.nextSecVideoInfo === inputMessage) {
+        await this.loadNextVideo(this.state.nextSecVideoInfo.uri);
+      } else {
+        await this.loadNextVideo(this.state.nextFriVideoInfo.uri);
+      }
+      return;
+    }
+    if (this.state.nextSecVideoInfo.text === '*') {
+      if (this.state.nextFirVideoInfo === inputMessage) {
+        await this.loadNextVideo(this.state.nextFirVideoInfo.uri);
+      } else {
+        await this.loadNextVideo(this.state.nextSecVideoInfo.uri);
+      }
+    }
   }
 
   async loadNextVideo(videoInfoUri) {
@@ -161,15 +176,21 @@ export default class Page3 extends React.PureComponent {
       ]);
     } else if (this.state.choiceMethod === 'PictureSelect') {
       // 图片双选
-      alertM(this.state.choiceQuestion);
+      alertM(this.state.choiceQuestion, '', [
+        { text: '', style: { height: '135px', color: '#fff0', background: `url(${this.state.nextFirVideoInfo.text}) no-repeat`, backgroundSize: 'cover' }, onPress: () => { this.handleFirPress(); } },
+        { text: '', style: { height: '135px', color: '#fff0', background: `url(${this.state.nextSecVideoInfo.text}) no-repeat`, backgroundSize: 'cover' }, onPress: () => { this.handleSecPress(); } },
+      ]);
     } else if (this.state.choiceMethod === 'Inbox') {
       // 输入框
-      promptM(this.state.choiceQuestion, '', [{ text: '取消' }, { text: '提交', onPress: () => { this.handleInbox(); } }], '');
+      promptM(this.state.choiceQuestion, '', [{ text: '提交', onPress: (inputMessage) => { this.handleInbox(inputMessage); } }, { text: '取消' }], '');
+    } else if (this.state.choiceMethod === 'Continue') {
+      // 直接跳下一段
+      this.handleFirPress();
     } else {
       // 文字双选
       alertM(this.state.choiceQuestion, '', [
-        { text: this.state.nextFirVideoInfo.text, onPress: () => { this.handleFirPress(); } },
-        { text: this.state.nextSecVideoInfo.text, onPress: () => { this.handleSecPress(); } },
+        { text: this.state.nextFirVideoInfo.text, style: { fontSize: '10px' }, onPress: () => { this.handleFirPress(); } },
+        { text: this.state.nextSecVideoInfo.text, style: { color: 'black', fontSize: '10px' }, onPress: () => { this.handleSecPress(); } },
       ]);
     }
   }
@@ -183,7 +204,6 @@ export default class Page3 extends React.PureComponent {
 
   render() {
     const { isMobile } = this.props;
-    // const lastURI = this.state.lastURI;
     const lastURI = this.state.lastURI;
     const firstURI = this.state.firstURI;
     const children = this.state.videoInfo.map((item, i) => (
