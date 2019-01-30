@@ -76,10 +76,9 @@ export default class Page3 extends React.PureComponent {
     videoInfoCache.choiceMethod = videoInfoRes.ChoiceMethod;
     videoInfoCache.choiceQuestion = videoInfoRes.ChoiceQuestion;
 
-    // TODO:设置Poster，区分mobile
     videoInfoCache.PosterURI = videoInfoRes.VideoPosterURI ? videoInfoRes.VideoPosterURI : '';
     videoInfoCache.MobilePosterURI = videoInfoRes.VideoPosterURIPhone ? videoInfoRes.VideoPosterURIPhone : '';
-    if (videoInfoRes.ChoiceMethod === 'Single') {
+    if ((videoInfoRes.ChoiceMethod === 'Single') || (videoInfoRes.ChoiceMethod === 'Continue')) {
       videoInfoCache.nextFirVideoInfoUri = videoInfoRes.ChoiceItems[0].NextURI ? videoInfoRes.ChoiceItems[0].NextURI : '';
       videoInfoCache.nextFirVideoInfoText = videoInfoRes.ChoiceItems[0].Text ? videoInfoRes.ChoiceItems[0].Text : '';
     } else {
@@ -95,6 +94,7 @@ export default class Page3 extends React.PureComponent {
       choiceMethod: videoInfoCache.choiceMethod,
       choiceQuestion: videoInfoCache.choiceQuestion,
     });
+    console.log(this.state);
     this.addHlsToPlayer();
   }
 
@@ -185,12 +185,13 @@ export default class Page3 extends React.PureComponent {
       promptM(this.state.choiceQuestion, '', [{ text: '提交', onPress: (inputMessage) => { this.handleInbox(inputMessage); } }, { text: '取消' }], '');
     } else if (this.state.choiceMethod === 'Continue') {
       // 直接跳下一段
+      console.log(this.state);
       this.handleFirPress();
     } else {
       // 文字双选
       alertM(this.state.choiceQuestion, '', [
-        { text: this.state.nextFirVideoInfo.text, style: { fontSize: '10px' }, onPress: () => { this.handleFirPress(); } },
-        { text: this.state.nextSecVideoInfo.text, style: { color: 'black', fontSize: '10px' }, onPress: () => { this.handleSecPress(); } },
+        { text: this.state.nextFirVideoInfo.text, style: { fontSize: '16px' }, onPress: () => { this.handleFirPress(); } },
+        { text: this.state.nextSecVideoInfo.text, style: { color: 'black', fontSize: '16px' }, onPress: () => { this.handleSecPress(); } },
       ]);
     }
   }

@@ -44,6 +44,7 @@ class Pay extends React.PureComponent {
           isLoading: false,
           payChannel: '微信(Wechat)',
         });
+        this.setPayExipreTime();
       } else {
         alert('您已支付，请尽情观看，将跳转至正片页');
         router.push('/');
