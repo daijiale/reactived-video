@@ -11,8 +11,6 @@ window.g_plugins.init({
   validKeys: ['patchRoutes','render','rootContainer','modifyRouteProps',],
 });
 
-
-
 // render
 let oldRender = () => {
   const rootContainer = window.g_plugins.apply('rootContainer', {

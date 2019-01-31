@@ -48,7 +48,13 @@ export default class Page3 extends React.PureComponent {
   };
 
   async componentDidMount() {
-    await this.initVideoInfoFromServer();
+    const videoInfoRes = localStorage.getItem('noPaidUri');
+    if (videoInfoRes === null) {
+      await this.initVideoInfoFromServer();
+    } else {
+      this.loadNextVideo(videoInfoRes);
+      localStorage.removeItem('noPaidUri');
+    }
   }
 
 
@@ -68,10 +74,13 @@ export default class Page3 extends React.PureComponent {
       // TODO:设置统一的异常处理页面
     }
     if ((videoRes.data.ErrMsg === 'no paid')) {
+      localStorage.setItem('noPaidUri', videoInfoUri);
       return router.push('/pay');
     }
+
     const videoInfoRes = videoRes.data.Result;
     const videoInfoCache = {};
+
     videoInfoCache.VideoPlayURI = videoInfoRes.VideoPlayURI;
     videoInfoCache.choiceMethod = videoInfoRes.ChoiceMethod;
     videoInfoCache.choiceQuestion = videoInfoRes.ChoiceQuestion;
@@ -94,7 +103,6 @@ export default class Page3 extends React.PureComponent {
       choiceMethod: videoInfoCache.choiceMethod,
       choiceQuestion: videoInfoCache.choiceQuestion,
     });
-    console.log(this.state);
     this.addHlsToPlayer();
   }
 
@@ -185,7 +193,6 @@ export default class Page3 extends React.PureComponent {
       promptM(this.state.choiceQuestion, '', [{ text: '提交', onPress: (inputMessage) => { this.handleInbox(inputMessage); } }, { text: '取消' }], '');
     } else if (this.state.choiceMethod === 'Continue') {
       // 直接跳下一段
-      console.log(this.state);
       this.handleFirPress();
     } else {
       // 文字双选
