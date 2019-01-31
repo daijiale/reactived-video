@@ -1,6 +1,5 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import { footer } from './data';
 
 export default function Footer() {
   return (
@@ -10,7 +9,7 @@ export default function Footer() {
           在观影和支付过程中，如遇问题，请加客服微信：
         </Row>
         <br />
-        <img src="http://placehold.it/100x100" />
+        <img style={{ width: '100px', height: '100px', marginBottom: '30px' }} src="/wechat-offical.jpg" />
       </div>
       <div className="footer-bottom">
         <div className="page">
