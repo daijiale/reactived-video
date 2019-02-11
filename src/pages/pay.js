@@ -5,6 +5,8 @@ import router from 'umi/router';
 import Footer from '../Home/Footer';
 import axios from '../axios';
 
+const PAY_SUCCESS_TEXT = '感谢您的支付，48小时内，您正在使用的电脑或手机可随意观看电影。请勿更换浏览器，或清除Cookie，以免付费信息失效。';
+
 const qrImg = {
   width: '200px',
   height: '200px',
@@ -77,7 +79,7 @@ class Pay extends React.PureComponent {
       const checkPaidRes = await axios.get(this.state.checkPaidURI);
       if (checkPaidRes.data.ErrMsg === '') {
         // 支付成功
-        alert('支付成功，开启48小时全集观影');
+        alert(PAY_SUCCESS_TEXT);
         router.push('/');
       } else {
         alert('尚未查询到该订单，请确认是否扣款成功或稍后重试');
@@ -107,6 +109,7 @@ class Pay extends React.PureComponent {
       const PayChoise = () => (
         <div>
           <h1 className="text-center">请选择支付渠道</h1>
+          <p style={{textAlign: 'center'}}>您已经看完《黑镜：潘达奈斯基》的第一段互动剧情，需要付费9.9元才能进行下一步选择。请点击下方链接选择微信或支付宝付款。付款后请点击“确认支付"返回观影页面。付款或观影过程中遇到问题请添加微信与客服联系。</p>
           <Flex>
             <Flex.Item>
               <Button icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/pdFARIqkrKEGVVEwotFe.svg" alt="" />} onClick={() => { this.payByAlipay(); }}>支付宝</Button>

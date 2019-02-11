@@ -8,8 +8,10 @@ import ReactDOM from 'react-dom';
 // runtime plugins
 window.g_plugins = require('umi/_runtimePlugin');
 window.g_plugins.init({
-  validKeys: ['patchRoutes','render','rootContainer','modifyRouteProps',],
+  validKeys: ['patchRoutes','render','rootContainer','modifyRouteProps','onRouteChange',],
 });
+
+
 
 // render
 let oldRender = () => {
@@ -28,9 +30,7 @@ const moduleBeforeRendererPromises = [];
 Promise.all(moduleBeforeRendererPromises).then(() => {
   render();
 }).catch((err) => {
-  if (process.env.NODE_ENV === 'development') {
-    console.error(err);
-  }
+  window.console && window.console.error(err);
 });
 
 require('../../global.less');

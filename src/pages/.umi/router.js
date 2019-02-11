@@ -18,10 +18,24 @@ let routes = [
     "component": require('../pay.js').default
   },
   {
-    "component": () => React.createElement(require('/usr/local/lib/node_modules/umi/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: false })
+    "component": () => React.createElement(require('/Users/daijiale/Desktop/reactived-video/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: false })
   }
 ];
+window.g_routes = routes;
 window.g_plugins.applyForEach('patchRoutes', { initialValue: routes });
+
+// route change handler
+function routeChangeHandler(location, action) {
+  window.g_plugins.applyForEach('onRouteChange', {
+    initialValue: {
+      routes,
+      location,
+      action,
+    },
+  });
+}
+window.g_history.listen(routeChangeHandler);
+routeChangeHandler(window.g_history.location);
 
 export default function RouterWrapper() {
   return (

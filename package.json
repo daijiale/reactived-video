@@ -24,7 +24,8 @@
     "react-dom": "^16.1.1",
     "react-github-button": "^0.1.11",
     "react-html5video": "^2.5.1",
-    "react-sublime-video": "^0.2.5"
+    "react-sublime-video": "^0.2.5",
+    "umi": "^2.4.4"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
